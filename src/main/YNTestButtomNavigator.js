@@ -130,11 +130,11 @@ export default YNTestButtomNavigator = createBottomTabNavigator({
    });
 //导航条上的内容展示
 YNTestButtomNavigator.navigationOptions = ({navigation}) => {
-    // let names = ["题库", "答题", "我的", "更多"]
-    let {routeName} = navigation.state.routes[navigation.state.index];
-    // let {routeName} = names[navigation.state.index];
+    let names = ["题库", "答题", "我的", "更多"]
+    // let {routeName} = navigation.state.routes[navigation.state.index];
+    let {routeName} = names[navigation.state.index];
     // You can do whatever you like here to pick the title based on the route name
-    let headerTitle = routeName;
+    let headerTitle = names[navigation.state.index];
     return {
         headerTitle,
     };
