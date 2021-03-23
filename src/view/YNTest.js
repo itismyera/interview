@@ -1,6 +1,16 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, FlatList} from 'react-native';
-import {Button, Icon, List, ListItem, Avatar } from 'react-native-elements';
+import {Platform, StyleSheet, Text, View, Button} from 'react-native';
+import pro1 from '../pro/pro1.json'
+import pro2 from '../pro/pro2.json'
+// import pro3 from '../pro/pro3.json'
+// import pro4 from '../pro/pro4.json'
+// import pro5 from '../pro/pro5.json'
+// import pro6 from '../pro/pro6.json'
+// import pro7 from '../pro/pro7.json'
+// import pro8 from '../pro/pro8.json'
+// import pro9 from '../pro/pro9.json'
+// import pro10 from '../pro/pro10.json'
+// import pro11 from '../pro/pro11.json'
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -8,81 +18,59 @@ const instructions = Platform.select({
     'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
-
-const list = [
-    {
-        id:1,
-      name: 'Amy Farha',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-      subtitle: 'Vice President'
-    },
-    {
-        id:2,
-      name: 'Chris Jackson',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Vice Chairman'
-    },
-    {
-        id:3,
-        name: 'Chris Jackson',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-      },
-      {
-        id:4,
-        name: 'Chris Jackson',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-      },
-      {
-        id:5,
-        name: 'Chris Jackson',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-      },
-    // ... // more items
-  ]
-
-
 class YNTest extends React.Component {
 
-    keyExtractor = (item, index) => index.toString()
+    generateProblems() {
+        var allData = [pro1, pro2];
+        var data = [];
+        var beginIndex = 0;
+        for (var i=0; i<allData.length; ++i) {
+            var oneData = allData[i];
+            var nums = this.randNums(0, oneData.length, 3);
+            for (var j=0; j<nums.length; ++j) {
+                var chooseData = JSON.parse(JSON.stringify(oneData[j]));
+                chooseData.index = beginIndex.toString();
+                data.push(chooseData); 
+                beginIndex ++ ;
+            }
+        }
+        return data;
+    }
 
-    renderItem = ({ item }) => (
-        <ListItem bottomDivider>
-            <ListItem.Content>
-                <ListItem.Title>{item.name}</ListItem.Title>
-                <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
-            </ListItem.Content>
-        </ListItem>
-    )
+    randNums(min,max,count){
+        var arr = [];
+        for(var i=min;i<max;i++){
+            arr.push(i);
+        }
+        var nums = [];
+        var temp = 0;
+        for(var i=0;i<count;i++){
+            var j = Math.floor((Math.random()*(max - min -i)));
+            temp = arr[j];
+            nums[i] = temp;
+            arr.splice(j,1);
+        }
+        return nums;
+    }
+
     render() {
-        return (
-            // <View style={styles.container}>
-            //     <Text style={styles.welcome}>答题</Text>
+        //导航条设置
+        const {navigate} = this.props.navigation;
 
-            // </View>
-            // <List containerStyle={styles.listContainer} > 
-            //     {list.map((l, i) => ( 
-            //         <ListItem 
-            //             key={i} 
-            //             title={l.title} 
-            //             subtitle={l.subtitle} 
-            //             // leftIcon={l.icon} 
-            //             containerStyle={styles.ListItemContainer} 
-            //             titleStyle={{ fontSize: 15, }} 
-            //             subtitleStyle={{ fontWeight: 'normal' }} 
-            //             // onPress={() => navigation.navigate(l.detail)} 
-            //         /> 
-            //     ))} 
-            // </List>
+        return (
             <View style={styles.container}>
-                <FlatList
-                    keyExtractor={(item) => item.id}
-                    data={list}
-                    renderItem={this.renderItem}
+                <Button
+                    title="开始测试"
+                    onPress={() => {
+                        let data = {
+                            nowIndex: "0",
+                            allData: this.generateProblems(),
+                            showSingle: false,
+                        }
+                        this.props.navigation.navigate('YNProblemView', data)}
+                    }
                 />
-              </View>
+            </View>
         );
     }
 }
@@ -93,11 +81,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
     },
     instructions: {
         textAlign: 'center',

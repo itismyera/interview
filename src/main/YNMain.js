@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import { StyleSheet} from 'react-native';
 //导入外部文件
-import NavigatorTextOne from './NavigatorTextOne';
 import YNProblemView from '../view/YNProblemView';
+import YNHomeSubView from '../view/YNHomeSubView';
+import YNMoreWebView from '../view/YNMoreWebView';
 import YNTestButtomNavigator from './YNTestButtomNavigator';
 
 import {createAppContainer} from 'react-navigation';
@@ -14,11 +15,14 @@ const YNMain = createStackNavigator({
         Home:{
             screen:YNTestButtomNavigator,
         },
-        NavigatorTextOne:{
-            screen:NavigatorTextOne,
-        },
         YNProblemView:{
             screen:YNProblemView,
+        },
+        YNHomeSubView:{
+            screen:YNHomeSubView,
+        },
+        YNMoreWebView:{
+            screen:YNMoreWebView,
         }
     },
     {

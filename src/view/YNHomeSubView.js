@@ -1,6 +1,16 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, Dimensions} from 'react-native';
-import webJson from '../pro/webJson.json'
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, Dimensions } from 'react-native';
+import pro1 from '../pro/pro1.json'
+import pro2 from '../pro/pro2.json'
+// import pro3 from '../pro/pro3.json'
+// import pro4 from '../pro/pro4.json'
+// import pro5 from '../pro/pro5.json'
+// import pro6 from '../pro/pro6.json'
+// import pro7 from '../pro/pro7.json'
+// import pro8 from '../pro/pro8.json'
+// import pro9 from '../pro/pro9.json'
+// import pro10 from '../pro/pro10.json'
+// import pro11 from '../pro/pro11.json'
 
 const { width, height } = Dimensions.get('window');//屏幕宽度
 
@@ -17,10 +27,17 @@ const instructions = Platform.select({
         'Shake or press menu button for dev menu',
 });
 
-class YNMore extends React.Component {
+class YNHomeSubView extends React.Component {
+
+    data = [pro1, pro2];
+
+    static navigationOptions = ({ navigation }) => ({
+        headerTitle: navigation.state.params.allData[parseInt(navigation.state.params.nowIndex)].title,
+      });
 
     state = {
         selectedIndex: null,
+        showData: this.data[parseInt(this.props.navigation.state.params.nowIndex)],
     }
 
     setSelectedIndex(index) {
@@ -39,9 +56,10 @@ class YNMore extends React.Component {
                     this.setSelectedIndex(item.index);
                     let data = {
                         nowIndex: item.index,
-                        showData: webJson[parseInt(item.index)],
+                        allData: this.state.showData,
+                        showSingle: true,
                     }
-                    this.props.navigation.navigate('YNMoreWebView', data)
+                    this.props.navigation.navigate('YNProblemView', data)
                 }}
 
                 style={{ backgroundColor }}
@@ -56,7 +74,7 @@ class YNMore extends React.Component {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={webJson}
+                    data={this.state.showData}
                     renderItem={this.renderItem}
                     keyExtractor={(item) => item.index}
                     style={styles.flatListStyle}
@@ -87,6 +105,7 @@ const styles = StyleSheet.create({
     flatListStyle: {
         width: width,
         flex: 1,
+        // backgroundColor: 'red',
     },
     item: {
         padding: 5,
@@ -96,7 +115,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         textAlign: 'left',
-        color: '#4A4AFF'
     },
 });
-export {YNMore as default};
+
+export { YNHomeSubView as default };

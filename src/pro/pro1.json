@@ -1,0 +1,32 @@
+[
+    {
+        "index": "0",
+        "title": "函数指针",
+        "ans": "// 1.函数指针\nvoid fun(int x) {\n    while (x-- > 0) {\n        cout << x << endl;\n    }\n}\n// 调用\nstd::thread t1(fun, 10);\nt1.join();"
+    },
+    {
+        "index": "1",
+        "title": "C++",
+        "ans": "1111"
+    },
+    {
+        "index": "2",
+        "title": "C++",
+        "ans": "1111"
+    },
+    {
+        "index": "3",
+        "title": "C++",
+        "ans": "1111"
+    },
+    {
+        "index": "4",
+        "title": "C++",
+        "ans": "1111"
+    },
+    {
+        "index": "5",
+        "title": "C++",
+        "ans": "1111"
+    }
+]
