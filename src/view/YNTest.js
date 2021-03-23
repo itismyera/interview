@@ -2,15 +2,15 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button} from 'react-native';
 import pro1 from '../pro/pro1.json'
 import pro2 from '../pro/pro2.json'
-// import pro3 from '../pro/pro3.json'
-// import pro4 from '../pro/pro4.json'
-// import pro5 from '../pro/pro5.json'
-// import pro6 from '../pro/pro6.json'
-// import pro7 from '../pro/pro7.json'
-// import pro8 from '../pro/pro8.json'
-// import pro9 from '../pro/pro9.json'
-// import pro10 from '../pro/pro10.json'
-// import pro11 from '../pro/pro11.json'
+import pro3 from '../pro/pro3.json'
+import pro4 from '../pro/pro4.json'
+import pro5 from '../pro/pro5.json'
+import pro6 from '../pro/pro6.json'
+import pro7 from '../pro/pro7.json'
+import pro8 from '../pro/pro8.json'
+import pro9 from '../pro/pro9.json'
+import pro10 from '../pro/pro10.json'
+import pro11 from '../pro/pro11.json'
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -21,12 +21,12 @@ const instructions = Platform.select({
 class YNTest extends React.Component {
 
     generateProblems() {
-        var allData = [pro1, pro2];
+        var allData = [pro1, pro2, pro3, pro4, pro5, pro6, pro7, pro8, pro9, pro10, pro11];
         var data = [];
         var beginIndex = 0;
         for (var i=0; i<allData.length; ++i) {
             var oneData = allData[i];
-            var nums = this.randNums(0, oneData.length, 3);
+            var nums = this.randNums(0, oneData.length, 5);
             for (var j=0; j<nums.length; ++j) {
                 var chooseData = JSON.parse(JSON.stringify(oneData[j]));
                 chooseData.index = beginIndex.toString();

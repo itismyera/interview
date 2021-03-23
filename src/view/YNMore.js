@@ -58,7 +58,7 @@ class YNMore extends React.Component {
                 <FlatList
                     data={webJson}
                     renderItem={this.renderItem}
-                    keyExtractor={(item) => item.index}
+                    keyExtractor={(item) => item.index.toString()}
                     style={styles.flatListStyle}
                 />
             </View>

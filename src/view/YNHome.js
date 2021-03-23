@@ -104,7 +104,7 @@ class YNHome extends React.Component {
                 <FlatList
                     data={problemPool}
                     renderItem={this.renderItem}
-                    keyExtractor={(item) => item.index}
+                    keyExtractor={(item) => item.index.toString()}
                     style={styles.flatListStyle}
                 />
             </View>

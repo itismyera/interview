@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import pro1 from '../pro/pro1.json'
 import pro2 from '../pro/pro2.json'
-// import pro3 from '../pro/pro3.json'
-// import pro4 from '../pro/pro4.json'
-// import pro5 from '../pro/pro5.json'
-// import pro6 from '../pro/pro6.json'
-// import pro7 from '../pro/pro7.json'
-// import pro8 from '../pro/pro8.json'
-// import pro9 from '../pro/pro9.json'
-// import pro10 from '../pro/pro10.json'
-// import pro11 from '../pro/pro11.json'
+import pro3 from '../pro/pro3.json'
+import pro4 from '../pro/pro4.json'
+import pro5 from '../pro/pro5.json'
+import pro6 from '../pro/pro6.json'
+import pro7 from '../pro/pro7.json'
+import pro8 from '../pro/pro8.json'
+import pro9 from '../pro/pro9.json'
+import pro10 from '../pro/pro10.json'
+import pro11 from '../pro/pro11.json'
 
 const { width, height } = Dimensions.get('window');//屏幕宽度
 
@@ -29,7 +29,7 @@ const instructions = Platform.select({
 
 class YNHomeSubView extends React.Component {
 
-    data = [pro1, pro2];
+    data = [pro1, pro2, pro3, pro4, pro5, pro6, pro7, pro8, pro9, pro10, pro11];
 
     static navigationOptions = ({ navigation }) => ({
         headerTitle: navigation.state.params.allData[parseInt(navigation.state.params.nowIndex)].title,
@@ -76,7 +76,7 @@ class YNHomeSubView extends React.Component {
                 <FlatList
                     data={this.state.showData}
                     renderItem={this.renderItem}
-                    keyExtractor={(item) => item.index}
+                    keyExtractor={(item) => item.index.toString()}
                     style={styles.flatListStyle}
                 />
             </View>
