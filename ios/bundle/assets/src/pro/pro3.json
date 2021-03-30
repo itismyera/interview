@@ -1,0 +1,147 @@
+[
+  {
+    "index": 0.0,
+    "title": "Lua中基本类型",
+    "ans": "Lua是动态类型语言，变量不要类型定义,只需要为变量赋值。 值可以存储在变量中，作为参数传递或结果返回。\n一共8种类型\nnil,number,string,boolean,table,userdata,function,thread\n其中：Lua 把 false 和 nil 看作是\"假\"，其他的都为\"真\""
+  },
+  {
+    "index": 1.0,
+    "title": "Lua的特性",
+    "ans": "轻量级: 它用标准C语言编写并以源代码形式开放，编译后仅仅一百余K，可以很方便的嵌入别的程序里。\n可扩展: Lua提供了非常易于使用的扩展接口和机制：由宿主语言(通常是C或C++)提供这些功能，Lua可以使用它们，就像是本来就内置的功能一样。\n\n其它特性:\n支持面向过程(procedure-oriented)编程和函数式编程(functional programming)；\n自动内存管理；只提供了一种通用类型的表（table），用它可以实现数组，哈希表，集合，对象；\n语言内置模式匹配；闭包(closure)；函数也可以看做一个值；提供多线程（协同进程，并非操作系统所支持的线程）支持；\n通过闭包和table可以很方便地支持面向对象编程所需要的一些关键机制，比如数据抽象，虚函数，继承和重载等。\n\n"
+  },
+  {
+    "index": 2.0,
+    "title": "Lua元表(Metatable)",
+    "ans": "在 Lua table 中我们可以访问对应的key来得到value值，但是却无法对两个 table 进行操作。\n因此 Lua 提供了元表(Metatable)，允许我们改变table的行为，每个行为关联了对应的元方法。\n\n例如，使用元表我们可以定义Lua如何计算两个table的相加操作a+b。\n当Lua试图对两个表进行相加时，先检查两者之一是否有元表，之后检查是否有一个叫\"__add\"的字段，若找到，则调用对应的值。\"__add\"等即时字段，其对应的值（往往是一个函数或是table）就是\"元方法\"。\n\n有两个很重要的函数来处理元表：\nsetmetatable(table,metatable):对指定table设置元表(metatable)，如果元表(metatable)中存在__metatable键值，setmetatable会失败 。\ngetmetatable(table):返回对象的元表(metatable)。\n\n__index 元方法\n这是 metatable 最常用的键。\n当你通过键来访问 table 的时候，如果这个键没有值，那么Lua就会寻找该table的metatable（假定有metatable）中的__index 键。如果__index包含一个表格，Lua会在表格中查找相应的键。\n\nLua查找一个表元素时的规则，其实就是如下3个步骤:\n1.在表中查找，如果找到，返回该元素，找不到则继续\n2.判断该表是否有元表，如果没有元表，返回nil，有元表则继续。\n3.判断元表有没有__index方法，如果__index方法为nil，则返回nil；如果__index方法是一个表，则重复1、2、3；如果__index方法是一个函数，则返回该函数的返回值。\n\n例如\nmytable = setmetatable({key1 = \"value1\"}, {\n  __index = function(mytable, key)\n    if key == \"key2\" then\n      return \"metatablevalue\"\n    else\n      return nil\n    end\n  end\n})\n\nprint(mytable.key1,mytable.key2)\n\n实例输出结果为：\nvalue1    metatablevalue\n\n常见的元方法\n__newindex 元方法\n__newindex 元方法用来对表更新，__index则用来对表访问 。\n当你给表的一个缺少的索引赋值，解释器就会查找__newindex 元方法：如果存在则调用这个函数而不进行赋值操作。\n\n__add，__sub，__mul，__div，__mod，__unm，__concat，__eq，__lt，__le 这是一批运算符\n\n__call 元方法\n__call 元方法在 Lua 调用一个值时调用\n\n__tostring 元方法\n__tostring 元方法用于修改表的输出行为"
+  },
+  {
+    "index": 3.0,
+    "title": "Lua闭包",
+    "ans": ""
+  },
+  {
+    "index": 4.0,
+    "title": "C和lua的互相调用",
+    "ans": ""
+  },
+  {
+    "index": 5.0,
+    "title": "Lua热更新机制的实现",
+    "ans": "热更新原理\nLua的 require(modelname) 把一个lua文件加载存放到package.loaded[modelname]。\n当我们加载一个模块的时候，会先判断是否在package.loaded中已存在，若存在则返回改模块，不存在才会加载(loadfile)，防止重复加载。\n\npackage.loaded是一个Table，其中包含了全局表_G、默认加载的模块(string, debug, package, io, os, table, math, coroutine)和用户加载的模块。\n\nLua热更新\n最简单粗暴的热更新就是将package.loaded[modelname]的值置为nil，强制重新加载：\n\nfunction reload_module(module_name)\n    package.loaded[modulename] = nil\n    require(modulename)\nend\n\n这样做虽然能完成热更，但问题是已经引用了该模块的地方不会得到更新， 因此我们需要将引用该模块的地方的值也做对应的更新。\n\nfunction reload_module(module_name)\n    local old_module = _G[module_name]\n\n    package.loaded[module_name] = nil\n    require (module_name)\n\n    local new_module = _G[module_name]\n    for k, v in pairs(new_module) do\n        old_module[k] = v\n    end\n\n    package.loaded[module_name] = old_module\nend"
+  },
+  {
+    "index": 6.0,
+    "title": "Lua 协同程序(coroutine)",
+    "ans": ""
+  },
+  {
+    "index": 7.0,
+    "title": "Lua的gc机制简述",
+    "ans": "在Lua5.0及其更早的版本中，Lua的GC是一次性不可被打断的过程，使用的++Mark算法是双色标记算法(Two color mark)++，这样系统中对象的非黑即白，要么被引用，要么不被引用，这会带来一个问题：在GC的过程中如果新加入对象，这时候新加入的对象无论怎么设置都会带来问题，如果设置为白色，则如果处于回收阶段，则该对象会在没有遍历其关联对象的情况下被回收；如果标记为黑色，那么没有被扫描就被标记为不可回收，是不正确的。\n\n为了降低一次性回收带来的性能问题以及双色算法的问题，在Lua5.1后，Lua都采用分布回收以及++三色增量标记清除算法（Tri-color incremental mark and sweep）++\n将所有对象分成三个状态：\n\nWhite状态，也就是待访问状态。表示对象还没有被垃圾回收的标记过程访问到。==（白色又分为White0和White1，主要为了解决上面所说到的在GC过程中新加入的对象的处理问题）==\nGray状态，也就是待扫描状态。表示对象已经被垃圾回收访问到了，但是对象本身对于其他对象的引用还没有进行遍历访问。\nBlack状态，也就是已扫描状态。表示对象已经被访问到了，并且也已经遍历了对象本身对其他对象的引用。\n\nGC流程：\n每个新创建的对象颜色设置为White\n//初始化阶段\n遍历root节点中引用的对象，从白色置为灰色，并且放入到Gray节点列表中\n//标记阶段\nwhile(Gray集合不为空,并且没有超过本次计算量的上限)：\n从中取出一个对象，将其置为Black\n遍历这个对象关联的其他所有对象：\nif 为White\n标记为Gray，加入到Gray链表中\n//回收阶段\n遍历所有对象：\nif 为White，\n没有被引用的对象，执行回收\nelse\n重新塞入到对象链表中，等待下一轮GC\n\n在每个步骤之间，由于程序可以正常执行，所以会破坏当前对象之间的引用关系。black对象表示已经被扫描的对象，所以他应该不可能引用到一个white对象。当程序的改变使得一个black对象引用到一个white对象时，就会造成错误。解决这个问题的办法就是设置barrier。barrier在程序正常运行过程中，监控所有的引用改变。如果一个black对象需要引用一个white对象，存在两种处理办法：\n将white对象设置成gray，并添加到gray列表中等待扫描。这样等于帮助整个GC的标识过程向前推进了一步。\n将black对象改回成gray，并添加到gray列表中等待扫描。这样等于使整个GC的标识过程后退了一步。\n\n这种垃圾回收方式被称为\"++Incremental Garbage Collection++\"(简称为\"IGC\"，Lua所采用的就是这种方法。使用\"IGC\"并不是没有代价的。IGC所检测出来的垃圾对象集合比实际的集合要小，也就是说，有些在GC过程中变成垃圾的对象，有可能在本轮GC中检测不到。不过，这些残余的垃圾对象一定会在下一轮GC被检测出来，不会造成泄露。"
+  },
+  {
+    "index": 8.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 9.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 10.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 11.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 12.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 13.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 14.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 15.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 16.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 17.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 18.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 19.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 20.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 21.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 22.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 23.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 24.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 25.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 26.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 27.0,
+    "title": "",
+    "ans": ""
+  },
+  {
+    "index": 28.0,
+    "title": "",
+    "ans": ""
+  }
+]
