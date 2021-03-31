@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, StatusBar, ActivityIndicator, TouchableHighlight, Image, addEventListener } from 'react-native';
+import { Platform, StyleSheet, Text, View, StatusBar, ActivityIndicator, TouchableHighlight, Image, BackHandler} from 'react-native';
 import { WebView } from 'react-native-webview';
 
 const instructions = Platform.select({
