@@ -1,98 +1,98 @@
 [
   {
     "index": 0.0,
-    "title": "React Native布局详细指南",
-    "ans": "一款好的APP离不了一个漂亮的布局，本文章将向大家分享React Native中的布局方式FlexBox。 \n在React Native中布局采用的是FleBox(弹性框)进行布局。\n\nFlexBox提供了在不同尺寸设备上都能保持一致的布局方式。FlexBox是CSS3弹性框布局规范，目前还处于最终征求意见稿 (Last Call Working Draft)阶段，并不是所有的浏览器都支持Flexbox。但大家在做React Native开发时大可不必担心FlexBox的兼容性问题，因为既然React Native选择用FlexBox布局，那么React Native对FlexBox的支持自然会做的很好。\n\n宽和高\n在学习FlexBox之前首先要清楚一个概念“宽和高”。一个组件的高度和宽度决定了它在屏幕上的尺寸，也就是大小。"
+    "title": "如何优化Cocos Creator 包体体积。",
+    "ans": "1: 代码体积(引擎 + 业务逻辑代码setting.js)大头在引擎;引擎优化,非常简单，你只要把不要的模块去掉就可以了，你要知道哪些模块是占体积多的，比如物理引擎，能不用的模块，就不用, cocos creator 足够优秀的2D编辑器，可以替代tilemap, 去掉tilemap逻辑。\n里面的文件数量, 非代码加载的资源，我一定放出resources模块。\n2: 图像资源;\n图片的压缩格式: 背景，jpg 体积要小于png, 背景图片jpg, 很多图片格式，导出美术图后，这些图，任然可以压缩。TinyPNG等; 图片分辨率: 1920x1080 > 960x540; 就减少分辨率。\n尽可能的使用九宫格的图片，来代替一张整图 ,大大的降低的图片的分斌率，这样就可以节省资源;\n图片清晰度: 其实压缩算法，也可以调整清晰度, png, 调整量化系数数，关键信息变少，清晰度会减少，但是分辨率不会变;\n图片的像素格式: 这个也式可以的，argb4444 非常少的，除非， 你不是彩色的。\n图集打包以后有空地: 空白的地方, 整理，调整;\n图片数量：越少越好，帧动画, 减少帧的数目，骨骼动画替换帧动画，节省资源;\n3:音乐音效资源（压缩格式, 背景音乐的大小，音乐的数量，声道，采样率）;\n压缩格式: WAV --->体积 mp3, ogg,\n声道：双声道的数据，那么这个时候，体积就式2倍;\n采样率: 1秒---》44100 sample, 降低采样率, 压缩软件来做到，视频编码工具来做到;\n背景音乐：体积一般比较大，竟可能的要优先优化它;\n4: 字库:\n(1) 特效文字，尽量使用位图字体，几个字母 + 图片，体积远远小于一个完整的字库, 性能还要好; 如数字，界面的文字, bmpfont ---> .png + .fnt文件;\n(2) 尽可能的使用系统字库 ;\n(3) fontmin可以压缩字库, 把不用的文字，从字库移除，减少体积;\n(4) 位图字与矢量字，哪个性能更好？位图字： 速度快，但是，内存大, 矢量字, 速度慢，但是内存小。"
   },
   {
     "index": 1.0,
-    "title": "高性能的简单列表组件，支持下面这些常用的功能：",
-    "ans": "完全跨平台。\n支持水平布局模式。\n行组件显示或隐藏时可配置回调事件。\n支持单独的头部组件。\n支持单独的尾部组件。\n支持自定义行间分隔线。\n支持下拉刷新。\n支持上拉加载。\n支持跳转到指定行（ScrollToIndex）。\n支持多列布局。"
+    "title": "Cocos creator如何做资源管理。",
+    "ans": "cocos提供了一系列的加载接口，包括cc.loader.load，cc.loader.loadRes，cc.loader.loadResArray，cc.loader.loadResDir\n创建和管理场景\n1、场景资源自动释放\ncc.loader.release\n属性检查器 中设置“自动释放资源”选项，该项默认关闭\n2、防止特定资源被自动释放\n当场景切换后，如果场景已设置自动释放资源资源，可以使用 cc.loader.setAutoRelease 或者 cc.loader.setAutoReleaseRecursively 来保留这些资源\n3、不延迟加载资源\n全部加载完成后才会触发场景切换\n4、延迟加载依赖的资源\n加载场景时，如果选项开启，则这个场景直接或间接依赖的所有贴图、粒子和声音都将被延迟到场景切换后才加载，使场景切换速度极大提升\n\n图像资源（Texture）\n1、目前包括 JPG 和 PNG 两种\n\n预制资源（Prefab）\n1、设为手动同步时\n当预制对应的原始资源被修改后，场景中的预制实例不会同步刷新，只有在用户手动还原预制时才会刷新。\n2、设为自动同步\n该预制实例会自动和原始资源保持同步\n3、预置的选项\n自动调整（默认）：\n设为这个选项后，引擎将根据创建次数自动调整优化策略。初次创建实例时，等同于“优化单次创建性能”，多次创建后将自动“优化多次创建性能”。\n优化单次创建性能：\n该选项会跳过针对这个 prefab 的代码生成优化操作。\n优化多次创建性能：\n该选项会启用针对这个 prefab 的代码生成优化操作。\n\n图集资源（Atlas）\n1、为什么要使用图集资源\n合成图集时会去除每张图片周围的空白区域，加上可以在整体上实施各种优化算法，合成图集后可以大大减少游戏包体和内存占用\n多个 Sprite 如果渲染的是来自同一张图集的图片时，这些 Sprite 可以使用同一个渲染批次来处理，大大减少 CPU 的运算时间，提高运行效率。\n2、图集制作软件\nTexturePacker\nZwoptex\n3、将以前碎图 -> 图集 方法\n目前我们提供了一个简单的小工具来完成场景中对图片资源引用从碎图或老图集到新图集的重定向。下面介绍工作流程。\n生成新图集：不管是从碎图合并，还是将原来的图集重新拆分或合并，您都需要先使用 TexturePacker 生成完整的新图集。然后将新图集导入到项目资源文件夹中。\n双击打开您需要重定向资源引用的场景或 Prefab\n点击主菜单的「开发者->在当前场景使用指定图集替换 spriteFrame…」，在打开的对话框里选择您新生成的图集，等待替换操作完成。（如果新图集有多张，应该重复这一步直到所有相关新图集都替换完毕） 4.如果您有多个场景或 prefab，需要重复执行 2-3 步，遍历每个相关的场景或 Prefab\n确认所有相关图片资源的引用都已经替换成了新图集后，现在可以删除原有的碎图或旧图集了。\n\n字体资源\n1、三类字体资源\n系统字体 ：使用Label组件中的 Use System Font 属性\n动态字体 ：TTF 格式\n位图字体 ：\n位图字体由 fnt 格式的字体文件和一张 png 图片\n2、位图字体生产工具\nGlyph Designer\nHiero\nBMFont (Windows)\n\n粒子资源（ParticleSystem）\n\n声音资源\n1、加载模式\n音频的加载方式只影响 Web 上的加载效果 由于各个 Web 平台实现标准的进度不一致，所以提供了两种声音资源的加载方式。\nWebAudio\n通过 WebAudio 方式加载的声音资源，在引擎内是以一个 buffer 的形式缓存的。\n这种方式的优点是兼容性好，问题比较少。缺点是占用的内存资源过多。\nDOM Audio\n通过生成一个标准的\n使用标准的 audio 元素播放声音资源的时候，在某些浏览器上可能遇到一些限制。\n比如：每次播放必须是用户操作事件内才允许播放（WebAudio 只要求第一次），只允许播放一个声音资源等。\n2、手动选择按某种解析方式加载音频\n有时候我们可能不会使用场景的自动加载或是预加载功能，而是希望自己手动控制 cc.load 资源的加载流程。 这个时候我们也是可以通过音频资源的 url 来选择加载的方式。\n默认方式加载音频\n音频默认是使用 webAudio 的方式加载并播放的，只有在不支持的浏览器才会使用 dom 元素加载播放。\ncc.loader.load(cc.url.raw(‘resources/background.mp3’), callback);\n强制使用 dom element 加载\n　　1.在资源管理器内选中一个 audio，属性检查器内会有加载模式的选择\n　　2.音频在加载过程中，会读取 url 内的 get 参数。其中只需要定义一个 useDom 参数，使其有一个非空的值，这样在 audioDownloader 中，就会强制使用 DOM element 的方式加载播放这个音频。\ncc.loader.load(cc.url.raw(‘resources/background.mp3?useDom=1’), callback);\n\n骨骼动画资源（Spine）\n1、导入骨骼动画资源 　骨骼动画所需资源有：\n.json 骨骼数据\n.png 图集纹理\n.txt/.atlas 图集数据\n2、创建骨骼动画资源\n方法之一 ：添加组件 ,然后 添加渲染组件 选择 Spine Skeleton\nPS：集成Spine功能，不需要额外添加插件\n\n瓦片图资源（TiledMap）\n1、导入地图资源\n　地图所需资源有：\n.tmx 地图数据\n.png 图集纹理\n.tsx tileset 数据配置文件（部分 tmx 文件需要）\n2、创建瓦片图资源\n方法之一 ：添加组件 ,然后 添加渲染组件 选择 TiledMap"
   },
   {
     "index": 2.0,
-    "title": "",
-    "ans": ""
+    "title": "Cocos Creator如何编写单例模式。",
+    "ans": "ts版本：\nexport default class GameManager\n{\n    private static instance: GameManager;\n    public static getInstance(): GameManager\n    {\n        if (!GameManager.instance)\n        {\n            GameManager.instance = new GameManager();\n        }\n        return GameManager.instance;\n    }\n}\n\n泛型\n//Singleton.ts\nexport class Singleton<T>{\n    private static instance: any = null;\n    public static GetInstance<T>(c: { new(): T }): T\n    {\n        if (this.instance == null)\n        {\n            this.instance = new c();\n        }\n        return this.instance;\n    }\n    public init()\n    {\n        console.dir(this);\n    }\n}\n\n泛型用法\nexport default class GameManager extends Singleton<GameManager>\n{\n public test()\n    {\n    }\n}\n\n//在其他地方调用\nGameManager.GetInstance(GameManager).init();\nGameManager.GetInstance(GameManager).test();"
   },
   {
     "index": 3.0,
-    "title": "",
-    "ans": ""
+    "title": "Cocos Creator 如何使用物理引擎?",
+    "ans": "一、开启物理引擎\n\nCOCOS物理引擎是默认关闭的，必须用代码打开\n新建一个脚本\n\nonLoad(){\n    let manager=cc.director.getPhysicsManager();\n    manager.enabled=true;//开启物理引擎\n}\n\n这是onload里面的代码\n脚本挂到canvas节点上即可开启物理引擎\n\n二、碰撞效果\n首先必须开启物理引擎\n必须在节点上添加RidBody（刚体）组件和物理组件中的碰撞组件这是重点\n\n\n然后需要在RigidBody里面设置刚体类型\n刚体类型: Static (静态)Kinematic (不妥外力)Dynamic (动态)和Animated (通过设置线性速度和角速度驱动）\n\n常用的刚体就是Static (静态)和Dynamic (动态)如果想让一个节点向下坠落就用Dynamic (动态)，如果想让一个节点当做地面就可以用Static (静态)\n\n物理碰撞组件有四种，分别是Chain（链条形） Circle（圆形） Box（盒形） Polygon（多边形）根据需要去选择，不要把碰撞组件当成物理碰撞组件来用\n\n三、碰撞回调\n必须做好前两项开启物理引擎并且有碰撞效果，必须的必，不然无效\n\n新建脚本来放碰撞回调\n\n    onBeginContact(contact:cc.PhysicsContact,selfCollider:cc.PhysicsCollider,otherConllider:cc.PhysicsCollider):void{\n        console.log(\"onBeginContact\")\n        //只在两个碰撞体开始接触时调用一次\n    }\n\n    onPreSolve(contact:cc.PhysicsContact,selfCollider:cc.PhysicsCollider,otherConllider:cc.PhysicsCollider):void{\n        console.log(\"onPreSolve\")\n        //每次将要处理碰撞体接触逻辑时被调用\n    }\n\n    onPostSolve(contact:cc.PhysicsContact,selfCollider:cc.PhysicsCollider,otherConllider:cc.PhysicsCollider):void{\n        console.log(\"onPostSolve\")\n        //每次处理完碰撞体接触逻辑时被调用\n    }\n\n    onEndContact(contact:cc.PhysicsContact,selfCollider:cc.PhysicsCollider,otherConllider:cc.PhysicsCollider):void{\n        console.log(\"onEndContact\")\n        //只在两个碰撞体结束接触时被调用一次\n    }\n\nselfCollider 和 otherCollider 很容易理解，如名字所示，selfCollider 指的是回调脚本的节点上的碰撞体，ohterCollider 指的是发生碰撞的另一个碰撞体。（这句话来自官方文档）\n\n在碰撞或者被碰撞的节点上挂上碰撞回调脚本，并且在RidBody(刚体)\n组件上开启碰撞回调\n\n\n这样就可以了\n\n导致没成功的原因可能是把碰撞组件当成了物理的碰撞组件，或者忘了挂脚本。如果是碰撞回调没有反应的话可能是RigidBody组件没有打开碰撞回调"
   },
   {
     "index": 4.0,
-    "title": "",
-    "ans": ""
+    "title": "Cocos Creator Label的原理与如何节约Drawcall?",
+    "ans": "Label是先将文字绘制在Canvas标签中，然后将Canvas作为贴图对象，在Render阶段渲染出来。"
   },
   {
     "index": 5.0,
-    "title": "",
+    "title": "Cocos Creator 背包系统可能会需要哪些优化？",
     "ans": ""
   },
   {
     "index": 6.0,
-    "title": "",
-    "ans": ""
+    "title": "Cocos Creator WebSocket与http://Socket.IO分别是什么？",
+    "ans": "websocket\n\n1: creator只支持websocket, h5的标准也只支持websocket;\n2: websocket 底层是 tcp socket, 基于tcp socket上建立了连接，收发数据的标准，保证了用户收到的数据和发到的数据是一致的，不用考虑粘包等问题,websocket协议已经解决了;\n3: websocket的使用方式:\n　　1>new WebSocket(url); 服务器对应的url: “ws://127.0.0.1:6081/ws”, ip + port\n　　2> 支持的数据: 文本数据类型与二进制数据类型;\n　　　　sock.binaryType = \"arraybuffer\"/”Blob”; 支持arraybuffer和Blob类型,一般配置成arraybuffer,根据服务器而定;\n　　3>配置好websocket的回掉函数:\n　　　　onopen(event), onmessage(event), onclose(event), onerror(event),\n　　4>不用了关闭socket或收到服务器关闭遇到错误: close方法;\n4: 基于node.js来测试下websocket, node.js见服务器课程;\n\nsocket.io\n1: socket.io是基于 TCP socket/Websocket封装的 上层的一个框架;\n2: 使得人们能方便的使用类似事件的模式来处理网络数据包;\n3: creator 搭建socket.io注意:\n　　1>jsb里面原生实现了SocketIO;\n　　2>h5 使用js的实现socket-io.js; // 下载标准的socket.io.js,然后修改过滤掉原生平台的（!CC_JSB && !cc.sys.isNative）;\n4: socket.io的使用: 注意客户端服务器版本一定要对上,使用课堂提供的版本匹配\n　　1> connect: var opts = {\n　　　　'reconnection':false,\n　　　　'force new connection': true,\n　　　　'transports':['websocket', 'polling']\n　　　}\n　　this.sio = window.io.connect(this.ip,opts);\n　　2>系统事件: connect/disconnect, connect_failed,\n　　3> 自定义事件:\n　　4> 关闭 this.sio.disconnect();"
   },
   {
     "index": 7.0,
-    "title": "",
+    "title": "Cocos Creator如何内置protobuf JS版本?",
     "ans": ""
   },
   {
     "index": 8.0,
-    "title": "",
-    "ans": ""
+    "title": "Cocos Creator 材质, shader 分别是什么？",
+    "ans": "1: 什么是Shader和材质?\nShader是一种给显卡GPU执行的程序, 是一种绘制算法，显卡的渲染流水线加载Shader代码后，就能够在绘制的时候执行Shader的代码。Cocos 有自己的一个Shader的结构，Shader的开发语言cocos使用的是GLSL编程语言。材质是一种配置文件，选好一个Shader,并指定好这个Shader所需要的参数；\n\n1.2: cocos 物体是如何绘制的?\n以Sprite组件为例，它有一个材质，这个时候绘制图片的时候，就使用这个材质，通过材质渲染管道准备好算法，和参数，这样，渲染管道就绘制出来。\n\n2: 完整的Shader渲染流程(pass)\n\n\n3: cocos Shader的结构\n3.1: 描述部分\n1.  `顶点shader在哪里，着色shader在哪里？材质上的参数定义哪些，这个是描述部分。`\n1\n\n\n3.2: 顶点Shader部分:\n\n\n3.3: 着色Shader部分:\n\n\n4: GLSL常用的概念:\nGLSL变量精度级别：highp, mediump, lowp (高, 中, 低) attribute: 渲染管道传过来的数据, 只能在顶点Shader中使用; varying: vectex Shader, frag Shader 的传递变量 uniform: 外部程序可以来设置的变量;"
   },
   {
     "index": 9.0,
-    "title": "",
-    "ans": ""
+    "title": "Cocos Creator 固定宽度与固定高度的底层原理是什么？Cocos creator是如何做适配的?",
+    "ans": "Widge称之为对齐挂件：能够根据需要将元素对齐父节点的不同参考位置。其实是一个相对定位组件，相对于自己的父元素。顶部的三个按钮相对于屏幕上边的距离保持不变。"
   },
   {
     "index": 10.0,
-    "title": "",
+    "title": "Cocos Creator 图集打包有什么意义，我们一般在项目里面怎么规划图集？",
     "ans": ""
   },
   {
     "index": 11.0,
-    "title": "",
+    "title": "Cocos Creator 如何做游戏框架，能让多人很好的协作,代码好维护?",
     "ans": ""
   },
   {
     "index": 12.0,
-    "title": "",
+    "title": "Cocos Creator 2D如何做Drawcall优化?",
     "ans": ""
   },
   {
     "index": 13.0,
-    "title": "",
-    "ans": ""
+    "title": "Cococs creator 骨骼动画与帧动画的优缺点是什么？",
+    "ans": "骨骼动画是cocos2d-x动画在人物渲染方面的技术,分二个部分:用于绘制人物的外观呈现（被称为蒙皮或者mesh）和用于mesh进行动画(造型和关键帧) 的一组分层的相互连接的骨骼."
   },
   {
     "index": 14.0,
-    "title": "",
-    "ans": ""
+    "title": "如何使用Cococs Creator制作一个地图编辑与寻路导航系统?",
+    "ans": "1、插件或者TileMap工具生成地图json文件\n2、astar寻路算法\n3、将json文件与寻路算法结合，获得路径坐标，并转化为游戏内的实际坐标"
   },
   {
     "index": 15.0,
-    "title": "",
+    "title": "Cocos Creator 节点池的基本原理是什么？如何使用?",
     "ans": ""
   },
   {
     "index": 16.0,
-    "title": "",
-    "ans": ""
+    "title": "Cocos Creator 如何设计热更新系统, 如何设计大厅与子游戏模式？",
+    "ans": "我们先打开官方教程，对照官方文档，了解一下大致流程，发现热更流程大致分为下面四点：\n1.基于原生打包目录中的 res 和 src 目录生成本地 Manifest 文件。\n2.创建一个热更新组件来负责热更新逻辑。\n3.游戏发布后，若需要更新版本，则生成一套远程版本资源，包含 res 目录、src 目录和 Manifest 文件，将远程版本部署到服务端。\n4.当热更新组件检测到服务端 Manifest 版本不一致时，就会开始热更新\n\n这里我简单剖析下DEMO:\n\n项目中必须得导入一份manifest文件(怎么导入参考我的热更新插件使用文档)\n游戏运行起来后，会运行项目的HotUpdateScene场景，这个场景会执行热更新逻辑，也就是HotUpdate.ts，我已经对热更逻辑进行了一个简单的封装，理论上其他项目可以直接使用。\nHotUpdate.ts的热更逻辑会根据当前项目的最新manifest文件信息，对比server上的manifest文件，有差异下载差异，没有差异就直接进入游戏了。\n下载完差异后，游戏必须要软重启(cc.game.restart())下，使热更新的资源生效，至此，热更新就算完成了。\n\n大厅+子游戏的模式，在棋牌类型、教育类型游戏中比较常见，通常是安装包里面只有大厅的资源和代码，然后子游戏根据需求以热更新的方式下载来提供给玩家。\n　　之前一直负责的是cocos2dx-lua的开发，lua作为脚本语言，非常适合做热更新及大厅+子游戏模式的开发。而cocos creator使用的是js或者ts，作为脚本语言也是很方便做热更新的，但是js编译是把所有的脚本编译成一个单独的js文件，如果不做调整，会导致所有的大厅+游戏代码编译成一个单独的js文件，是不太方便做成大厅+子游戏的模式的，这里要讨论的就是如何调整，以做成大厅+子游戏的模式。\n　　首先就是要将大厅、子游戏分开来构建了，要不就是创建单独的大厅+子游戏工程，要不就是将大厅或者子游戏的代码、资源拷贝到一个构建工程，然后用命令行工具或者直接使用GUI工具构建。我这边没有单独分开创建工程，选择的是在构建的时候通过脚本拷贝相关的资源，然后单独构建。\n　　分开构建/编译好了资源之后，就是在app中怎么使用了。在lua版本中，引擎的资源加载方式是直接读取指定目录的脚本/资源，所以我们只要先将子游戏的脚本/资源下载好，再引入指定目录的脚本就可以了。js作为脚本资源，思路上我们也是读取对应目录的脚本，但是在creator版本中，引擎封装了一套资源加载工具，每个资源对应一个uuid，访问资源的时候是使用uuid去寻找资源(我们使用cc.loader.loadRes传入的是带资源目录的url，内部会根据这个url找到uuid再来加载资源)，构建/编译项目的时候，会生成一个setting.js/jsc的文件，这个文件就是uuid和实际资源路径的对应表。所以我们需要做的就是如何引入子游戏生成的这个setting文件。参考论坛网友的思路，就是引入另外一个js脚本，在该脚本中再去读取对应子游戏的setting文件，合并到大厅的setting配置中，然后再跳转到对应的游戏场景"
   },
   {
     "index": 17.0,
-    "title": "",
-    "ans": ""
+    "title": "Cocos Android里 runOnGLThread是什么意思？",
+    "ans": "在android中经常需要用到异步操作，Thread+Handler方式比较繁琐（当然功能也最为强大），而AsyncTask只能执行一次，很多需求不能满足（有关AsyncTask用法，请参考我引用的另外一篇博客）。\n      此时，我们可以试试Activity提供的另外一种简单的方法runOnUiThread，runOnUiThread可以帮助你在线程中执行UI更新操作。\nrunOnUiThread是Activity中的方法，在我们的工作线程中需要告诉系统是哪个Activity调用，所以前面显式地指明Activity\n\nrunOnUiThread首先判断是否是UI线程，不是的话就post，如果是的话就正常运行该线程。只要经过主线程中的Handler.post或者postDelayed处理，线程Runnable都可以被加入到UI主线程的消息循环中，并为主线程的Handler所检索并调用。\n\n值得注意的是，本节中的runOnUiThread方法适合于从子线程中更新普通Android View内容时调用。但是，当我们在Android下进行OpenGL ES开发时，也就是本文关注的cocos2d-x开发时，需要使用另一个方法，即下文要讨论的runOnGLThread。\n\ncocos2d-x开发中，一旦涉及到Android平台移植自然要与Cocos2dxActivity这个东西打交道。Cocos2dxActivity是cocos2d-x开发团队的成果，它是一个抽象类，具体形式如下：\n\n我们知道，cocos2d-x是运行于OpenGL平台的。Android平台下进行OpenGL开发要与一个特殊View--GLSurefaceView打交道。GLSurefaceView要使用它自己的渲染器(Render)进行图形渲染，这个Render是运行于一个独立的区别于主GUI线程的子线程上的。"
   },
   {
     "index": 18.0,
-    "title": "",
-    "ans": ""
+    "title": "Cocos Creator 如何设计自动化打包发布脚本?",
+    "ans": "（1）Jenkins\nhttps://blog.csdn.net/foupwang/article/details/82421965\n  (2) 自己写脚本搭建\nhttps://xyzzlky.cn/posts/57161/"
   },
   {
     "index": 19.0,
