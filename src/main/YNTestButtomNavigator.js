@@ -13,6 +13,27 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 
 export default YNTestButtomNavigator = createBottomTabNavigator({
 
+    YNMore:{
+        screen:YNMore,
+        navigationOptions:{
+            //tab 属性
+            tabBarLabel:'更多',
+            tabBarIcon:({tintColor, focused}) =>(
+            focused ?
+                <Image
+                    source={require('../img/fri_sel.png')}
+                    style={styles.iconStyle}
+
+                />
+                :
+                <Image
+                    source={require('../img/fri_nor.png')}
+                    style={styles.iconStyle}
+                />
+            )
+
+        }
+    },
 
     Home:{
         screen:YNHome,
@@ -77,27 +98,6 @@ export default YNTestButtomNavigator = createBottomTabNavigator({
         }
     },
 
-    YNMore:{
-        screen:YNMore,
-        navigationOptions:{
-            //tab 属性
-            tabBarLabel:'更多',
-            tabBarIcon:({tintColor, focused}) =>(
-            focused ?
-                <Image
-                    source={require('../img/fri_sel.png')}
-                    style={styles.iconStyle}
-
-                />
-                :
-                <Image
-                    source={require('../img/fri_nor.png')}
-                    style={styles.iconStyle}
-                />
-            )
-
-        }
-    },
     },
     {
         //设置TabNavigator的位置
@@ -130,7 +130,7 @@ export default YNTestButtomNavigator = createBottomTabNavigator({
    });
 //导航条上的内容展示
 YNTestButtomNavigator.navigationOptions = ({navigation}) => {
-    let names = ["题库", "答题", "我的", "更多"]
+    let names = ["更多", "题库", "答题", "我的"]
     // let {routeName} = navigation.state.routes[navigation.state.index];
     // You can do whatever you like here to pick the title based on the route name
     let headerTitle = names[navigation.state.index];

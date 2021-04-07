@@ -12,7 +12,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 //创建StackNavigator
 const YNMain = createStackNavigator({
-        Home:{
+        YNMore:{
             screen:YNTestButtomNavigator,
         },
         YNProblemView:{
@@ -26,7 +26,7 @@ const YNMain = createStackNavigator({
         }
     },
     {
-        initialRouteName: 'Home',
+        initialRouteName: 'YNMore',
     }
 );
 
