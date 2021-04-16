@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     },
     answer: {
         fontSize: 18,
-        textAlign: 'left',
+        textAlign: 'justify',
         color: '#333333',
         margin: 1,
         marginBottom: 5,
