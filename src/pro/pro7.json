@@ -1,58 +1,58 @@
 [
   {
     "index": 0.0,
-    "title": "",
-    "ans": ""
+    "title": "冒泡排序",
+    "ans": "比较两个记录键值的大小，如果这两个记录键值的大小出现逆序，则交换这两个记录\n\nfunction bubbleSort(arr){\n    for(let i = 1;i < arr.length;i++){\n        for(let j = i;j > 0;j--){\n            if(arr[j] < arr[j-1]){\n                [arr[j],arr[j-1]] = [arr[j-1],arr[j]];\n            }\n        }\n    }\n    return arr;\n}"
   },
   {
     "index": 1.0,
-    "title": "",
-    "ans": ""
+    "title": "快排",
+    "ans": "在n个记录中取某一个记录的键值为标准，通常取第一个记录键值为基准，通过一趟排序将待排的记录分为小于或等于这个键值的两个独立的部分，这是一部分的记录键值均比另一部分记录的键值小，然后，对这两部分记录继续分别进行快速排序，以达到整个序列有序\n\nfunction quickSort(arr){\n    if(arr.length <= 1) return arr;\n    let right = [],left = [],keys = arr.shift();\n    for(let value of arr){\n        if(value > keys){\n            right.push(value)\n        }else{\n            left.push(value);\n        }\n    }\n    return quickSort(left).concat(keys,quickSort(right));\n}"
   },
   {
     "index": 2.0,
-    "title": "",
-    "ans": ""
+    "title": "插入排序",
+    "ans": "第i（i大于等于1）个记录进行插入操作时，R1、 R2，...，是排好序的有序数列，取出第i个元素，在序列中找到一个合适的位置并将她插入到该位置上即可。\n\nfunction insertSort(arr){\n    for(let i = 1;i < arr.length;i++){\n        let j = i-1;\n        if(arr[i]<arr[j]){\n            let temp = arr[i];\n            while(j >= 0 && temp < arr[j]){\n                arr[j+1] = arr[j];\n                j--;\n            }\n            arr[j+1] = temp;\n        }\n    }\n    return arr;\n}"
   },
   {
     "index": 3.0,
-    "title": "",
-    "ans": ""
+    "title": "希尔排序",
+    "ans": "算法先将要排序的一组数按某个增量d（n/2,n为要排序数的个数）分成若干组，每组中记录的下标相差d.对每组中全部元素进行直接插入排序，然后再用一个较小的增量（d/2）对它进行分组，在每组中再进行直接插入排序。当增量减到1时，进行直接插入排序后，排序完成。\n\nfunction hillSort(arr){\n    let len = arr.length;\n    for(let gap = parseInt(len >> 1);gap >= 1;gap = parseInt(gap >> 1)){\n        for(let i = gap;i < len;i++){\n            if(arr[i] < arr[i-gap]){\n                let temp = arr[i];\n                let j = i - gap;\n                while(j >= 0 && arr[j] > temp){\n                    arr[j+gap] = arr[j];\n                    j -= gap;\n                }\n                arr[j+gap] = temp;\n            }\n        }\n    }\n    return arr;\n}"
   },
   {
     "index": 4.0,
-    "title": "",
-    "ans": ""
+    "title": "选择排序",
+    "ans": "在第i次选择操作中，通过n-i次键值间比较，从n-i+1个记录中选出键值最小的记录，并和第i（1小于等于1小于等于n-1）个记录交换\n\nfunction selectSort(arr){\n    for(let i = 0;i < arr.length;i++){\n        let min = Math.min(...arr.slice(i));\n        let index = arr.indexOf(min);\n        [arr[i],arr[index]] = [arr[index],arr[i]];\n    }\n    return arr;\n}"
   },
   {
     "index": 5.0,
-    "title": "",
-    "ans": ""
+    "title": "堆排序",
+    "ans": "function adjustMaxHeap(heap,head,heapSize){\n    let temp = heap[head];\n    let child = head * 2 + 1;\n    while(child < heapSize){\n        if(child+1 < heapSize && heap[child] < heap[child+1]) child++;\n        if(heap[head] < heap[child]){\n            heap[head] = heap[child];\n            head = child;\n            child = head * 2 + 1;\n        }else break;\n        heap[head] = temp;\n    }\n}\n\nfunction buildHeap(heap){\n    for(let i = (heap.length-1) >> 1;i >= 0;i--){\n        adjustMaxHeap(heap,i,heap.length);\n    }\n}\n\nfunction heapSort(arr){\n    buildHeap(arr);\n    for(let i = arr.length-1;i > 0;i--){\n        [arr[i],arr[0]] = [arr[0],arr[i]];\n        adjustMaxHeap(arr,0,i);\n    }\n    return arr;\n}"
   },
   {
     "index": 6.0,
-    "title": "",
-    "ans": ""
+    "title": "归并排序",
+    "ans": "把一个有n个记录的无序文件看成是由n个长度为1的有序子文件组成的文件，然后进行两两归并\n\nfunction MergeSort(arr,left,right){\n    if(left >= right) return;\n    let mid = Math.floor((right - left) >> 1) + left;\n    MergeSort(arr,left,mid);\n    MergeSort(arr,mid+1,right);\n    Merge(arr,left,mid,right);\n    return arr;\n}\nfunction Merge(arr,left,mid,right){\n    let temp = [],i = 0;\n    let p1 = left,p2 = mid + 1;\n    while(p1 <= mid && p2 <= right){\n        arr[p1] <= arr[p2] ? temp[i++] = arr[p1++] : temp[i++] = arr[p2++];\n    }\n    while(p1 <= mid){\n        temp[i++] = arr[p1++];\n    }\n    while(p2 <= right){\n        temp[i++] = arr[p2++];\n    }\n    for(let i = 0;i < temp.length;i++){\n        arr[i+left] = temp[i];\n    }\n}"
   },
   {
     "index": 7.0,
-    "title": "",
-    "ans": ""
+    "title": "桶排序",
+    "ans": "把数据分组，放在一个个的桶中，然后对每个桶里面的在进行排序\n\nfunction radixSort(arr,arrDomain,gropSize){\n    let data = [];\n    for(let i = 0;i < arr.length;i++) data.push([]);\n    console.log(data)\n    for(let i = 0;i < arr.length;i++){\n        data[Math.floor(parseInt(arr[i] / gropSize)) + 1].push(arr[i]);\n    }\n    for(let i = 0;i < data.length;i++){\n        quickSort(data[i]);\n    }\n    return data.flat(Infinity);\n}"
   },
   {
     "index": 8.0,
-    "title": "",
-    "ans": ""
+    "title": "系统自带排序实现",
+    "ans": "每个语言的排序内部实现都是不同的。\n对于 JS 来说，数组长度大于 10 会采用快排，否则使用插入排序。选择插入排序是因为虽然时间复杂度很差，但是在数据 量很小的情况下和 O(N * logN) 相差无几，然而插入排序需要的常数时间很小，所以相对别的排序来说更快。"
   },
   {
     "index": 9.0,
-    "title": "",
-    "ans": ""
+    "title": "排序稳定性",
+    "ans": "稳定性的意思就是对于相同值来说，相对顺序不能改变。通俗的讲有两个相同的数 A 和 B，在排序之前 A 在 B 的前面， 而经过排序之后，B 跑到了 A 的前面，对于这种情况的发生，我们管他叫做排序的不稳定性。\n稳定性有什么意义？个人理解对于前端来说，比如我们熟知框架中的虚拟 DOM 的比较，我们对一个``列表进行渲染， 当数据改变后需要比较变化时，不稳定排序或操作将会使本身不需要变化的东西变化，导致重新渲染，带来性能的损耗。"
   },
   {
     "index": 10.0,
-    "title": "",
-    "ans": ""
+    "title": "排序面试题目",
+    "ans": "快速排序在完全无序的情况下效果最好，时间复杂度为O(nlogn)，在有序情况下效果最差，时间复杂度为O(n^2)。\n外部排序常用的算法是归并排序。\n数组元素基本有序的情况下，插入排序效果最好，因为这样只需要比较大小，不需要移动，时间复杂度趋近于O(n)。\n如果只想得到1000个元素组成的序列中第5个最小元素之前的部分排序的序列，用堆排序方法最快。\n对长度为 n 的线性表作快速排序，在最坏情况下，比较次数为 n(n-1)/2。"
   },
   {
     "index": 11.0,

@@ -1,23 +1,23 @@
 [
   {
     "index": 0.0,
-    "title": "",
-    "ans": ""
+    "title": "MSL、TTL和RTT的区别",
+    "ans": "MSL 是Maximum Segment Lifetime英文的缩写，是“报文最大生存时间”，是任何报文在网络上存在的「最长时间」，超过这个时间报文将被丢弃。\nip头中有一个TTL域，TTL是 time to live的缩写，中文可以译为“生存时间”，这个生存时间是由源主机设置初始值但不是存的具体时间，而是存储了一个ip数据报可以经过的「最大路由数」，每经过一个处理他的路由器此值就减1，当此值为0则数据报将被丢弃，同时发送ICMP报文通知源主机。\nRTT是客户到服务器「往返」所花时间（round-trip time，简称RTT），表示从发送端发送数据开始，到发送端收到来自接收端的确认（接收端收到数据后便立即发送确认），总共经历的时延。TCP含有动态估算RTT的算法。TCP还持续估算一个给定连接的RTT，这是因为RTT受网络传输拥塞程序的变化而变化。"
   },
   {
     "index": 1.0,
-    "title": "",
-    "ans": ""
+    "title": "TCP四次挥手中客户端的最后一次挥手为什么要等待两个MSL",
+    "ans": "等待两个MSL时间主要目的是怕最后一个 ACK包服务器没收到，那么服务器在超时后将重发第三次握手的FIN包，客户端接到重发的FIN包后可以再发一个ACK应答包。"
   },
   {
     "index": 2.0,
-    "title": "",
-    "ans": ""
+    "title": "套接字（Socket）的具体用法",
+    "ans": "Socket是应用层与TCP/IP协议族通信的中间软件抽象层，它是一组「接口」。在设计模式中，Socket其实就是一个门面模式，它把复杂的TCP/IP协议族隐藏在Socket接口后面，对用户来说，一组简单的接口就是全部，让Socket去组织数据，以符合指定的协议。\n\nSocket实现服务器端和客户端通信：\n\n客户端 \n1.创建套接字  \n2.向服务器发送连接请求（connect） \n3.通信（send/recv) \n4.关闭套接字 \n\n服务器\n1.创建用于监听的套接字（socket）\n2.将套接字绑定到本地地址和端口上（bind）\n3.将套接字设为监听模式（listen）\n4.等待客户请求（accept），此处要不断的调用accept\n5.通信（send/receive），完成后返回4\n6.关闭套接字（closesocket）"
   },
   {
     "index": 3.0,
-    "title": "",
-    "ans": ""
+    "title": "tcp连接有多少种状态",
+    "ans": "包括了三次握手建立连接和四次挥手断开连接的过程\n\n1.closed：起始点，tcp连接 超时或关闭时进入此状态\n2.listen：服务端等待连接时的状态，调用Socket、bind、listen函数就能进入此状 态，称为被动打开\n3.SYN-sent：客户端发起连接，发送SYN给服务端，若不能连接进入closed\n4.SYN-rcvd：服务端接受客户端的SYN，由listen进入SYN-rcvd。同时返回一个ACK，并发送一个SYN给服务端。\n特殊情况：客户端发起SYN的同时接收到服务端的SYN，客户端会由SYN-sent转为SYN-rcvd状态\n5.established：可以传输数据的状态\n6.FIN-wait1：主动关闭连接，发送FIN，由established转为此状态\n7.FIN-wait2：主动关闭连接，接收到对方的FIN+ACK，由FIN-wait1转为此状态\n8.close-wait：收到FIN，发送ACK，被动关闭的一方关闭连接进入此状态\n9.last-ACK:发送FIN，同时在接受ACK时，由close-wait进入此状态。被关闭的一方发起关闭请求\n10.closing：两边同时发送关闭请求，由FIN-wait1进入此状态，收到FIN请求，同时响应一个ACK\n11.time-wait：\nFIN-wait2到此状态：双方不同时发送FIN的情况下，主动关闭的一方在完成自己的请求后，收到对方的FIN后的状态\ncloseing到此状态：双方同时发起关闭，都发送了FIN，同时接受FIN并发送ACK后的状态\nFIN-wait1到此状态：对方发来的FIN的ACK同时到达后的状态，与上一条的区别是本身发送的FIN回应的ACK先于对方的FIN到达，而上一条是FIN先到达\n\n客户端独有的：SYN_SENT 、FIN_WAIT1 、FIN_WAIT2 、CLOSING 、TIME_WAIT 。\n服务器独有的：LISTEN、SYN_RCVD 、CLOSE_WAIT、LAST_ACK 。\n共有的：CLOSED、ESTABLISHED 。"
   },
   {
     "index": 4.0,

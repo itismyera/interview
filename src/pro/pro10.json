@@ -6,82 +6,82 @@
   },
   {
     "index": 1.0,
-    "title": "",
-    "ans": ""
+    "title": "女仆餐厅小游戏A*算法，寻路算法",
+    "ans": "完整的A*算法描述如下：\n\n* 初始化open_set和close_set；\n* 将起点加入open_set中，并设置优先级为0（优先级最高）；\n* 如果open_set不为空，则从open_set中选取优先级最高的节点n：\n    * 如果节点n为终点，则：\n        * 从终点开始逐步追踪parent节点，一直达到起点；\n        * 返回找到的结果路径，算法结束；\n    * 如果节点n不是终点，则：\n        * 将节点n从open_set中删除，并加入close_set中；\n        * 遍历节点n所有的邻近节点：\n            * 如果邻近节点m在close_set中，则：\n                * 跳过，选取下一个邻近节点\n            * 如果邻近节点m也不在open_set中，则：\n                * 设置节点m的parent为节点n\n                * 计算节点m的优先级\n                * 将节点m加入open_set中"
   },
   {
     "index": 2.0,
-    "title": "",
+    "title": "AOE项目PVP战斗帧同步和状态同步",
     "ans": ""
   },
   {
     "index": 3.0,
-    "title": "",
+    "title": "和服务器的网络交互底层编写，smartfox版本",
     "ans": ""
   },
   {
     "index": 4.0,
-    "title": "",
+    "title": "通用的战场开发整理",
     "ans": ""
   },
   {
     "index": 5.0,
-    "title": "",
+    "title": "通用排行榜整理",
     "ans": ""
   },
   {
     "index": 6.0,
-    "title": "",
+    "title": "通用跨服组队协议",
     "ans": ""
   },
   {
     "index": 7.0,
-    "title": "",
+    "title": "COK试玩版小游戏整理",
     "ans": ""
   },
   {
     "index": 8.0,
-    "title": "",
+    "title": "COK联盟对决状态机",
     "ans": ""
   },
   {
     "index": 9.0,
-    "title": "",
+    "title": "COK整体大地图优化，参考乱世王者的优化项",
     "ans": ""
   },
   {
     "index": 10.0,
-    "title": "",
+    "title": "小游戏开发过程中的优化项",
     "ans": ""
   },
   {
     "index": 11.0,
-    "title": "",
+    "title": "cocos引擎的修改和优化",
     "ans": ""
   },
   {
     "index": 12.0,
-    "title": "",
+    "title": "AOE项目GM平台开发 ",
     "ans": ""
   },
   {
     "index": 13.0,
-    "title": "",
+    "title": "AOE跨平台开发和发包流程",
     "ans": ""
   },
   {
     "index": 14.0,
-    "title": "",
+    "title": "COK热更流程以及资源下载流程",
     "ans": ""
   },
   {
     "index": 15.0,
-    "title": "",
+    "title": "女仆餐厅中的动画控制",
     "ans": ""
   },
   {
     "index": 16.0,
-    "title": "",
+    "title": "女仆餐厅的新手引导",
     "ans": ""
   },
   {
