@@ -81,53 +81,53 @@
   },
   {
     "index": 16.0,
-    "title": "",
-    "ans": ""
+    "title": "C++ typedef typename 作用",
+    "ans": "typedef typename std::vector<T>::size_type size_type;\n\nvector::size_type源码\n\ntemplate <class T,class Alloc=alloc>\nclass vector{\npublic:\n    //...\n    typedef size_t size_type;\n    //...\n};\n\nvector::size_type是vector的嵌套类型定义，其实际等价于 size_t类型。\n\n实际上，模板类型在实例化之前，编译器并不知道vector<T>::size_type是什么东西，事实上一共有三种可能：\n\n静态数据成员\n静态成员函数\n嵌套类型\n\n那么此时typename的作用就在此时体现出来了——定义就不再模棱两可。\n\n语句的真是面目是：\ntypedef创建了存在类型的别名，而typename告诉编译器std::vector<T>::size_type是一个类型而不是一个成员。"
   },
   {
     "index": 17.0,
-    "title": "",
-    "ans": ""
+    "title": "模版的完全特化与偏特化",
+    "ans": "模版特化：任何针对模版参数进一步进行条件限制设计的特化版本。 <<泛型思维>>\n完全特化：针对所有的模版参数进行特化。 <<c++ primer>>\n\n模板分为类模板与函数模板，特化分为全特化与偏特化。全特化就是限定死模板实现的具体类型，偏特化就是如果这个模板有多个类型，那么只限定其中的一部分。\n\n举例如下：\ntemplate<class T,class N> \nclass Template{}; \n \n全特化:\ntemplate<> \nclass Template<int,char>{};\n\n\n偏特化：\ntemplate<class T> \nclass Template<T,int>{};\n \n注意：函数模版不存在偏特化，只有类模版才能偏特化\n\n\n#include <iostream>\nusing namespace std;\n \ntemplate<typename T, typename N>\nclass Test\n{\npublic:\n    Test( T i, N j ) : a(i), b(j)\n    {\n        cout<<\"普通模板类\"<< a <<' ' << b << endl;\n    }\nprivate:\n    T a;\n    N b;\n};\n \ntemplate<>\nclass Test<int , char>\n{\npublic:\n    Test( int i, char j ) : a( i ), b( j )\n    {\n        cout<<\"模版类全特化\"<< a  << ' ' << b << endl;\n    }\nprivate:\n    int a;\n    char b;\n};\n \ntemplate <typename N>\nclass Test<char, N>\n{\npublic:\n    Test( char i, N j ):a( i ), b( j )\n    {\n        cout<<\"模版类偏特化\"<< a<< ' ' << b << endl;\n    }\nprivate:\n    char a;\n    N b;\n};\n \n//模板函数  \n    template<typename T1, typename T2>  \nvoid fun(T1 a , T2 b)  \n{  \n    cout<<\"模板函数\"<<endl;  \n}  \n \n//模版函数全特化  \ntemplate<>  \nvoid fun<int ,char >(int a, char b)  \n{  \n    cout<<\"模版函数全特化\"<<endl;  \n}  \n \n//函数不存在偏特化：下面的代码是错误的  \n// template<typename T2> \n// void fun<char,T2>(char a, T2 b) \n// { \n//     cout<<\"模版函数偏特化\"<<endl; \n// } \n \n \nint main()\n{\n    Test<double , double> t1( 0.1,0.2 );   //普通模版类\n    Test<int , char> t2( 1, 'A' );   //模版类完全特化\n    Test<char, bool> t3( 'A', true );  //模版类偏特化\n    return 0;\n}"
   },
   {
     "index": 18.0,
-    "title": "",
-    "ans": ""
+    "title": "全局变量、static全局变量、全局常量使用方法",
+    "ans": "1.全局变量的使用条件是，在.cpp文件中定义并初始化\nint g_nvalue = 9;\n使用时，并不需要添加什么头文件，直接在要使用全局变量的.cpp中声明：\nextern int g_nvalue;\n\n特殊类型：const全局变量\nconst在c中默认是外链接，而在c++中默认是内链接\n如:在.cpp中定义:\nconst int g_nvalue = 9;\n那么在另一个.cpp中使用它，这样声明：\nextern const int g_nvalue;\n编译时出错：提示找不到g_navalue\n\n方法1：c++定义的const全局变量作用域既然域static一样，那么可以采用添加.h文件的方法，如：\n添加global.h文件，里面添加：\nextern const int g_nvalue;\n然后原来的定义const全局变量的.cpp中添加global.h，在要使用这个变量的.cpp中添加global.h,这样就可以使用const变量了\n\n方法2：通过添加extern使const全局变量强制外链接\n.cpp中定义时同时添加extern:\nextern const int g_nvalue = 9;\n使用它的.cpp中声明：\nextern const int g_nvalue;\n然后就可以使用了\n\n2.static全局变量\nstatic全局变量的作用域是定义的源文件，只被初始化一次，使用格式如下：\n在使用的.cpp文件中加入：\nstatic int g_snValue = 9;\n由于它只定义的文件中起作用，所以使用也只能在定义的.cpp文件中\nstatic全局变量定义在.h中，通过.cpp访问的是该值的拷贝，即会单独分配一块内存，并将该值拷贝一份，.cpp中所做的任何更改都不会对原值造成任何影响，所以static全局变量一般定义在.cpp中，防止造成信息污染，任何外部想访问值的内容，可以通过在.h中添加新的函数，获取.cpp的静态值的内容即可\n\n3.全局常量\n1)const单独使用时，其特性与static一样（每个编译单元中地址都不一样，不过因为是常量，也不能修改，所以就没有多大关系）\n2)在c++中const默认是内链接，即在全局内定义的const全局变量默认是内链接，作用域在本文件，并不是全局可见的，即局部变量"
   },
   {
     "index": 19.0,
-    "title": "",
-    "ans": ""
+    "title": "extern “C”的作用详解",
+    "ans": "extern \"C\"的主要作用就是为了能够正确实现C++代码调用其他C语言代码。加上extern \"C\"后，会指示编译器这部分代码按C语言（而不是C++）的方式进行编译。由于C++支持函数重载，因此编译器编译函数的过程中会将函数的参数类型也加到编译后的代码中，而不仅仅是函数名；而C语言并不支持函数重载，因此编译C语言代码的函数时不会带上函数的参数类型，一般只包括函数名。"
   },
   {
     "index": 20.0,
-    "title": "",
-    "ans": ""
+    "title": "C++11 最常用的新特性",
+    "ans": "auto关键字：编译器可以根据初始值自动推导出类型。但是不能用于函数传参以及数组类型的推导\n\nnullptr关键字：nullptr是一种特殊类型的字面值，它可以被转换成任意其它的指针类型；而NULL一般被宏定义为0，在遇到重载时可能会出现问题。\n\n智能指针：C++11新增了std::shared_ptr、std::weak_ptr等类型的智能指针，用于解决内存管理的问题。\n\n初始化列表：使用初始化列表来对类进行初始化\n\n右值引用：基于右值引用可以实现移动语义和完美转发，消除两个对象交互时不必要的对象拷贝，节省运算存储资源，提高效率\n\natomic原子操作用于多线程资源互斥操作\n\n新增STL容器array以及tuple"
   },
   {
     "index": 21.0,
-    "title": "",
-    "ans": ""
+    "title": "C++在什么情况下会发生拷贝",
+    "ans": "//1. 你自定义的类通过按值传递传给一个函数\nvoid MyFunc(MyClass myclass); //调用这个函数会调用拷贝构造函数\n//2. 你想通过已有的类的一个对象来创建另一个对象\nMyClass myclass1;\nMyClass myclass2(myclass1);//这里会调用拷贝构造函数\n//3. 当你用到容器（例如vector<MyClass>）需要向容器中增加元素的时候\nvector<MyClass> v;\nMyClass myclass;\nv.push_back(myclass); //这里调用拷贝构造函数\n//4. 当对象作为函数的返回值时"
   },
   {
     "index": 22.0,
-    "title": "",
-    "ans": ""
+    "title": "C++内存分区有哪些",
+    "ans": "在C++中，内存分为5个区，从上到下依次是栈、堆、自由存储区、全局/静态存储区和常量存储区。\n1、栈\n编译器在需要的时候分配，在不需要的时候自动清除的变量存储区。里面的变量通常是局部变量、函数参数等。\n2、堆\n由new分配的内存块，他们的释放编译器不去管，由应用程序区控制，一般一个new就要对应一个delete。如果程序员没有释放掉，那么程序结束后，操作系统自动回收。\n3、自由存储区\n由malloc等分配的内存块，他和堆是十分相似的，不过它是用free来结束自己的生命的。\n4、全局/静态存储区\n全局变量和静态变量被分配到同一块内存中，在以前的c语言中，全局变量又分为初始化的和未初始化的，在C++里面没有这个区分了，他们共同占用同一块内存区。\n5、常量存储区\n这是一块比较特殊的存储区，他们里面存放的是常量，不允许修改。"
   },
   {
     "index": 23.0,
-    "title": "",
-    "ans": ""
+    "title": "sizeof和strlen的区别",
+    "ans": "sizeof\nsizeof用于计算分配的数组空间大小，不关心里面存了多少数据；\n对于指针，sizeof操作符返回这个指针占的空间，一般是4个字节；\n对于数组，sizeof返回这个数组所有元素占的总空间。char*与char[]容易混淆，一定要分清，而且char*=\"aaa\"的写法现在不被提倡，应予以避免\n\nstrlen(只计算char*字符串的长度)\nstrlen不区分是数组还是指针，就读到\\0为止返回长度。而且strlen是不把\\0计入字符串的长度的。\nstrlen只计算char*字符串的长度，以\\0'为字符串结束标记关心存储的数据内容，不关心每个字符所占空间的大小和类型。"
   },
   {
     "index": 24.0,
-    "title": "",
-    "ans": ""
+    "title": "C++所有的构造函数包括哪些",
+    "ans": "//无参数构造函数\n// 如果创建一个类你没有写任何构造函数,则系统会自动生成默认的无参构造函数，函数为空，什么都不做\n // 只要你写了一个下面的某一种构造函数，系统就不会再自动生成这样一个默认的构造函数，如果希望有一个这样的无参构造函数，则需要自己显示地写出来\n Complex(void)\n {\n      m_real = 0.0;\n      m_imag = 0.0;\n } \n \n //    一般构造函数（也称重载构造函数）\n // 一般构造函数可以有各种参数形式,一个类可以有多个一般构造函数，前提是参数的个数或者类型不同（基于c++的重载函数原理）\n // 例如：你还可以写一个 Complex( int num)的构造函数出来\n // 创建对象时根据传入的参数不同调用不同的构造函数\n Complex(double real, double imag)\n {\n      m_real = real;\n      m_imag = imag;         \n  }\n \n //    复制构造函数（也称为拷贝构造函数）\n //    复制构造函数参数为类对象本身的引用，用于根据一个已存在的对象复制出一个新的该类的对象，一般在函数中会将已存在对象的数据成员的值复制一份到新创建的对象中\n //    若没有显示的写复制构造函数，则系统会默认创建一个复制构造函数，但当类中有指针成员时，由系统默认创建该复制构造函数会存在风险，具体原因请查询 有关 “浅拷贝” 、“深拷贝”的文章论述\n Complex(const Complex & c)\n {\n         // 将对象c中的数据成员值复制过来\n         m_real = c.m_real;\n         m_img    = c.m_img;\n }            \n\n // 类型转换构造函数，根据一个指定的类型的对象创建一个本类的对象\n // 例如：下面将根据一个double类型的对象创建了一个Complex对象\n Complex::Complex(double r)\n {\n         m_real = r;\n         m_imag = 0.0;\n }\n\n // 等号运算符重载\n // 注意，这个类似复制构造函数，将=右边的本类对象的值复制给等号左边的对象，它不属于构造函数，等号左右两边的对象必须已经被创建\n // 若没有显示的写=运算符重载，则系统也会创建一个默认的=运算符重载，只做一些基本的拷贝工作\n Complex &operator=( const Complex &rhs )\n {\n         // 首先检测等号右边的是否就是左边的对象本，若是本对象本身,则直接返回\n         if ( this == &rhs ) \n         {\n                 return *this;\n         }\n         \n         // 复制等号右边的成员到左边的对象中\n         this->m_real = rhs.m_real;\n         this->m_imag = rhs.m_imag;\n         \n        // 把等号左边的对象再次传出\n        // 目的是为了支持连等 eg:    a=b=c 系统首先运行 b=c\n        // 然后运行 a= ( b=c的返回值,这里应该是复制c值后的b对象)    \n         return *this;\n }"
   },
   {
     "index": 25.0,
-    "title": "",
-    "ans": ""
+    "title": "C++ 深拷贝与浅拷贝区别",
+    "ans": "深拷贝和浅拷贝最根本的区别在于是否真正获取一个对象的复制实体，而不是引用。\n假设B复制了A，修改A的时候，看B是否发生变化：\n\n如果B跟着也变了，说明是浅拷贝，拿人手短！（修改堆内存中的同一个值）\n\n如果B没有改变，说明是深拷贝，自食其力！（修改堆内存中的不同的值）\n\n浅拷贝（shallowCopy）只是增加了一个指针指向已存在的内存地址，\n\n深拷贝（deepCopy）是增加了一个指针并且申请了一个新的内存，使这个增加的指针指向这个新的内存，\n\n使用深拷贝的情况下，释放内存的时候不会因为出现浅拷贝时释放同一个内存的错误。\n\n浅复制：仅仅是指向被复制的内存地址，如果原地址发生改变，那么浅复制出来的对象也会相应的改变。\n\n深复制：在计算机中开辟一块新的内存地址用于存放复制的对象。"
   },
   {
     "index": 26.0,
